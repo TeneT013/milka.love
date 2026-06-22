@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>milkä.lovё</title>
+  <link rel="icon" type="image/png" href="./images/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="./images/favicon.svg" />
+  <link rel="shortcut icon" href="./images/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./images/apple-touch-icon.png" />
+  <link rel="manifest" href="./images/web-app-manifest-192x192.png" />
+  <link rel="stylesheet" href="styles/globals.css">
+  <link rel="stylesheet" href="styles/style.css">
+  <script src="https://code.s3.yandex.net/web-code/smoothly.js" defer></script>
+  <script src="scripts/script.js" defer></script>
+</head>
+<body>
+    <div class="header">
+      <p class="logo">milkä.lovё</p>
+      <button id="openModalBtn" class="button-modal button_main" ><img class="gamburger-button gamburger-button-open" src="./svg/gamburger.svg" alt="кнопка открытия модального окна"></button>
+      <dialog id="moodDialog" class="modal_window">
+    <div class="dialog-wrapper">
+    <button id="closeModalBtn" class="button-modal button_modal-closer"><img class="gamburger-button gamburger-button-close" src="./svg/gamburber-close.svg" alt="кнопка закрытия модального окна"></button>
+      <div class="buttons_mood-wrapper">
+        <button id="saddBtn" data-mood="sadd" class="button_mood sadd-btn">грусть</button>
+        <button id="loveBtn" data-mood="love" class="big-btn button_mood love-btn">любовь</button>
+        <button id="happyBtn" data-mood="happy" class="button_mood happy-btn">счастье</button>
+        <button id="wannaCuddleBtn" data-mood="wannaCuddle" class="button_mood big-btn wannaCuddle-btn">#хочетсяприлипнуть</button>
+        <button id="fuckThisAllBtn" data-mood="fuckThisAll" class="button_mood big-btn fuckThisAll-btn">#пошловсёнахуй</button>
+      </div>
+    </div>
+    </dialog>
+    </div>
+    <div class="wrapper">
+    <div class="video-container">
+      <video autoplay loop muted playsinline class="video" src="./images/wanna_cuddle/cuddle.webm"></video>
+    </div>
+    <div class="advice">
+      <span class="first_phrase">⭐ Не будь букой!</span>
+      <span class="phrase">кликни на кнопочку настроения выше ↑</span>
+      <img class="cursor" src="./images/cursor.gif" alt="cursor">
+    </div>
+  </div>
+    <button id="repeatBtn" class="button_mood anotherBtn big-btn">Ещё идея</button>
+
+    <p class="footer">2026 from TeneT for lovely milkä.</p>
+</body>
+</html>

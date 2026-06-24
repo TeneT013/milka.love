@@ -26,7 +26,6 @@ body {
   font-family: 'Suisse';
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 15px;
 }
 
@@ -215,6 +214,7 @@ body {
 @media (width >= 700px) {
   body {
     height: 100vh;
+    justify-content: center;
   }
 
   .wrapper {
@@ -222,6 +222,21 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+  }
+
+  .modal_window {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dialog-wrapper {
+    position: relative;
+  }
+
+  .button_modal-closer {
+    position: absolute; 
+    top: -150px;
+    right: 30px;
   }
 }
 

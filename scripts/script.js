@@ -32,7 +32,6 @@ let fuckThisAllIntros = [
   "📜 Официальное разрешение забить на всё:",
   "⛓️ Когда весь мир откровенно достал:"];
 
-
 let saddPhrases = [
   { text: 'Так, отставить депрессивный арт-хаус. Включаем режим энергосбережения: кутаемся в плед, отменяем все дела, а весь мир пусть подождёт.', video: './images/sadd/vmoiobyatia.webm' },
   { text: 'Если сегодня день выдался серым и неудачным — это не значит, что ты не прекрасна. Ты шедевр по умолчанию, просто выдохни.', video: './images/sadd/yaryadom.webm' },
@@ -106,7 +105,7 @@ const allPhrases = {
   fuckThisAll: fuckThisAllPhrases
 }
 
-const allIntros = {
+const allIntros = { 
   sadd: saddIntros,
   love: loveIntros,
   happy: happyIntros,
@@ -115,11 +114,22 @@ const allIntros = {
 }
 
 function getRandomElement(arr) {
-  let randIndex = Math.floor(Math.random() * arr.length);
-  return arr[randIndex];
+  if (arr.length <= 1) return arr[0];
+  let currentElement;
+  let currentText;
+  let lastText;
+  do {
+    let randIndex = Math.floor(Math.random() * arr.length);
+    currentElement = arr[randIndex];
+    currentText = currentElement.text ? currentElement.text : currentElement;
+    lastText = arr.lastSelectedText;
+  } while (currentText === lastText);
+  arr.lastSelectedText = currentText;
+  return currentElement;
 }
 
 const moodButtons = document.querySelectorAll('.button_mood')
+const repeatBtn = document.getElementById('repeatBtn')
 const intro = document.querySelector ('.first_phrase')
 const phrase = document.querySelector('.phrase');
 const advice = document.querySelector('.advice');
@@ -128,6 +138,8 @@ const cursor = document.querySelector('.cursor')
 const moodDialog = document.getElementById('moodDialog')
 const openModalBtn = document.getElementById('openModalBtn')
 const closeModalBtn = document.getElementById('closeModalBtn')
+
+let currentActiveMood = null;
 
 openModalBtn.addEventListener('click', () => {
   moodDialog.showModal()
@@ -143,44 +155,52 @@ moodDialog.addEventListener('click', (e) => {
   }
 })
 
+function runRandomLogic(mood) {
+  const currentIntrosArray = allIntros[mood];
+  const currentPhrasesArray = allPhrases[mood];
+  if (!currentIntrosArray || !currentPhrasesArray) return;
+  const randomIntro = getRandomElement(currentIntrosArray);
+  const randomElement = getRandomElement(currentPhrasesArray);
+    
+  if (randomElement) {
+    smoothly(intro, 'textContent', randomIntro);
+    smoothly(phrase, 'textContent', randomElement.text);
+    smoothly(video, 'src', randomElement.video);
+    
+    if (randomElement.text.length > 60) {
+      advice.style.fontSize = 'clamp(20px, calc(17.273px + 0.727vw), 26px)';
+      cursor.style.height = 'clamp(17px, calc(13.818px + 0.848vw), 24px)';
+    } else {
+      advice.style.fontSize = 'clamp(30px, calc(27.273px + 0.727vw), 36px)';
+      cursor.style.height = 'clamp(25px, calc(22.727px + 0.606vw), 30px)';
+    }
+  }
+}
+
 moodButtons.forEach(button => {
   button.addEventListener('click', function() {
     const mood = button.dataset.mood;
-    const currentIntrosArray = allIntros[mood]
-    const currentPhrasesArray = allPhrases[mood];
-    const runRandomLogic = function() {
-    const randomIntro = getRandomElement(currentIntrosArray)
-    const randomElement = getRandomElement(currentPhrasesArray);
-      
-      if (randomElement) {
-        smoothly(intro, 'textContent', randomIntro);
-        smoothly(phrase, 'textContent', randomElement.text);
-        smoothly(video, 'src', randomElement.video);
-        
-        if (randomElement?.text?.length > 60) {
-          advice.style.fontSize = '20px';
-          cursor.style.height = '17px';
-        } else {
-          advice.style.fontSize = '30px';
-          cursor.style.height = '25px';
-        }
-      }
-    };
-    
-    runRandomLogic();
-    repeatBtn.onclick = runRandomLogic;
-    repeatBtn.textContent = 'Ещё идея';
-    moodDialog.close()
+    repeatBtn.setAttribute('data-current-mood', mood);
+    runRandomLogic(mood);
+    repeatBtn.textContent = 'Ещё идея'; 
+    moodDialog.close();
   });
 });
 
 repeatBtn.onclick = function() {
-  repeatBtn.textContent = 'Сначала выбери своё настроение выше!';
-};
-
+  const savedMood = repeatBtn.getAttribute('data-current-mood');
   
-for (let i=0; i<=2; i=i+1) {
-smoothly(phrase, 'textContent',phrases[i].text);
-smoothly(image, 'src', phrases[i].image)
-
-}
+  if (savedMood) {
+    repeatBtn.disabled = true;
+    repeatBtn.style.pointerEvents = 'none';
+    repeatBtn.style.opacity = '0.4';
+    runRandomLogic(savedMood);
+    setTimeout(() => {
+      repeatBtn.disabled = false;
+      repeatBtn.style.pointerEvents = 'auto';
+      repeatBtn.style.opacity = '1';
+    }, 500);
+  } else {
+    repeatBtn.textContent = 'Сначала выбери своё настроение выше!';
+  }
+};
